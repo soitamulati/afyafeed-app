@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,9 +10,7 @@ plugins {
 val localProperties = Properties()
 val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
-    localPropertiesFile.inputStream().use { reader ->
-        localProperties.load(reader)
-    }
+    localProperties.load(FileInputStream(localPropertiesFile))
 }
 
 val flutterVersionCode = localProperties.getProperty("flutter.versionCode") ?: "1"
@@ -19,7 +20,11 @@ android {
     namespace = "com.example.afyafeed_app"
     compileSdk = 34
 
-    sourceSets["main"].java.srcDirs("src/main/kotlin")
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("src/main/kotlin")
+        }
+    }
 
     defaultConfig {
         applicationId = "com.example.afyafeed_app"
@@ -27,7 +32,7 @@ android {
         targetSdk = 34
         versionCode = flutterVersionCode.toInt()
         versionName = flutterVersionName
-        isMultiDexEnabled = true
+        multiDexEnabled = true  // FIXED THIS LINE
     }
 
     buildTypes {
