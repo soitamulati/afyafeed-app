@@ -1,59 +1,38 @@
-import java.util.Properties
-import java.io.FileInputStream
-
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("dev.flutter.flutter-gradle-plugin")
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
 }
-
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localProperties.load(FileInputStream(localPropertiesFile))
-}
-
-val flutterVersionCode = localProperties.getProperty("flutter.versionCode") ?: "1"
-val flutterVersionName = localProperties.getProperty("flutter.versionName") ?: "1.0"
 
 android {
-    namespace = "com.example.afyafeed_app"
-    compileSdk = 34
+    namespace = "com.example.yourapp" // CHANGE THIS to your package name
+    compileSdk = 35
+    ndkVersion = "27.0.12077973"
 
-    sourceSets {
-        getByName("main") {
-            java.srcDirs("src/main/kotlin")
-        }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17
     }
 
     defaultConfig {
-        applicationId = "com.example.afyafeed_app"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = flutterVersionCode.toInt()
-        versionName = flutterVersionName
-        multiDexEnabled = true  // FIXED THIS LINE
+        applicationId = "com.example.yourapp" // CHANGE THIS to your package name
+        minSdk = 23
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0.0"
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.debug
         }
-    }
-}
-
-// THIS IS THE FIX FOR flutter_inappwebview
-configurations.all {
-    resolutionStrategy {
-        force("androidx.webkit:webkit:1.8.0")
     }
 }
 
 flutter {
     source = "../.."
-}
-
-dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7")
-    implementation("androidx.multidex:multidex:2.0.1")
 }
